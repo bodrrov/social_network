@@ -4,10 +4,10 @@ User = get_user_model()
 from group.models import Group
 
 class Post(models.Model):
-    text = models.TextField()
+    text = models.TextField(help_text='Текст вашей записи', verbose_name='Текст')
     pub_date = models.DateTimeField("date published", auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
-    group = models.ForeignKey(Group, on_delete= models.SET_NULL, related_name= "posts", blank= True, null= True)
+    group = models.ForeignKey(Group, on_delete= models.SET_NULL, related_name= "posts", blank= True, null= True, verbose_name='Группа')
 
     class Meta:
         ordering = ['-pub_date']

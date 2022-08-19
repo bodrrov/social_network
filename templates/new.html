@@ -15,15 +15,18 @@
                     {% endfor %}
 
 
-                <form method="post" action="{% url 'signup' %}">
+                <form method="post" action="{% url 'new' %}">
                     {% csrf_token %}
-                <input type="hidden" name="next" value="{{ next }}">
-                                <label for="{{ form.group.label }}" class="col-md-4 col-form-label text-md-right">Группа</label>
+
+                <div class="form-group row">
+                                <label for="{{ form.group.label }}" class="col-md-4 col-form-label text-md-right">{{ form.group.label }}</label>
                                 <div class="col-md-6">
                                   {{ form.group}}
                                 <p class="help">{{ form.group.help_text|safe }}</p>
                                 </div>
-                                <label for="{{ form.text.label }}" class="col-md-4 col-form-label text-md-right">Текст</label>
+
+                 <div class="form-group row">
+                                <label for="{{ form.text.label }}" class="col-md-4 col-form-label text-md-right">{{ form.text.label }}</label>
                                 <div class="col-md-6">
                                   {{ form.text}}
                                 </div>
