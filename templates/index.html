@@ -3,34 +3,16 @@
 {% block header %}Последние обновления на сайте{% endblock %}
 {% block content %}
 
-    <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
-  <div class="carousel-inner">
-    <div class="carousel-item active" data-interval="10000">
-      <img src="..." class="d-block w-100" alt="...">
-    </div>
-      {% for slide in slider_list %}
-      <div class="carousel-item active">
-    <div class="carousel-item" data-interval="2000">
-      <img src="{{ slide.cms_img.url }}" class="d-block w-100" alt="...">
-    </div>
-      {% endfor %}
-  <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </a>
-</div>
-
-
-    {% for post in posts %}
+    {% for post in page %}
     <h3>
         Автор: {{ post.author.get_full_name }}, Дата публикации: {{ post.pub_date|date:"d M Y" }}
     </h3>
     <p>{{ post.text|linebreaksbr }}</p>
     {% if not forloop.last %}<hr>{% endif %}
     {% endfor %}
+
+    {% if page.has_other_pages %}
+    {% include "paginator.html" with items=page paginator=paginator %}
+{% endif %}
 
 {% endblock %}
