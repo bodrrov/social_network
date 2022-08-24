@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'users',
     'group',
     'posts',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,3 +142,6 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Идентификатор текущего сайта
+SITE_ID = 1

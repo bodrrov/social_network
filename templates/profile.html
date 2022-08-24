@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %} Профиль {{profile.username}} {% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{% include "includes/profile_card.html" %}
+{% endif %}
+<main role="main" class="container">
+    <div class="table">
+
+        <h1> Посты пользователя {{profile.username}}</h1>
+
+        {% for post in page %}
+        {% include "includes/post_item.html" with post=post %}
+        {% endfor %}
+
+        {% if page.has_other_pages %}
+        {% include "includes/paginator.html" with items=page paginator=paginator%}
+        {% endif %}
+
+    </div>
+</main>
+{% endblock %}

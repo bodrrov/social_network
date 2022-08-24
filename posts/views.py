@@ -45,3 +45,57 @@ def new_post(request):
     post.save()
     return redirect('index')
 
+def profile(request, username):
+    user = get_object_or_404(User,
+                             username=username)
+    post_list = user.posts.all()
+    paginator = Paginator(post_list, 10)
+    post_count = paginator.count
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'profile.html', {
+            'profile': user,
+            'post_list': post_list,
+            'my_posts': post_count,
+            'paginator': paginator,
+            'page': page
+        })
+
+
+def post_view(request, username, post_id):
+    post = get_object_or_404(Post.objects.select_related('author'),
+                             id=post_id, author__username=username)
+    form = CommentForm()
+    comments = post.comments.all()
+    author = post.author
+    return render(
+        request,
+        'post.html',
+        {'post': post, 'author': author, 'comments': comments, 'form': form}
+    )
+
+@login_required
+def post_edit(request, username, post_id):
+    post = get_object_or_404(Post,
+                             id=post_id,
+                             author__username=username)
+
+    if request.user != post.author:
+        return redirect('post',
+                        username=username,
+                        post_id=post_id)
+
+    form = PostForm(request.POST or None, instance=post)
+    if form.is_valid():
+        form.save()
+        return redirect('post',
+                        username=username,
+                        post_id=post_id)
+
+    return render(request,
+                  'new_post.html',
+                  {'form': form,
+                   'post': post
+                   }
+                  )
+
