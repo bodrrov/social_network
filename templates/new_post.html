@@ -24,8 +24,7 @@
                 </div>
                 <div class='card-body'>
                     <form method='post' enctype='multipart/form-data'
-                          action='{% url ' new-post
-                    ' %}'>
+                          action='{% url ' new-post' %}'>
                     {% csrf_token %}
                     {{ form.as_p }}
                     <div class='col-md-6 offset-md-4'>
