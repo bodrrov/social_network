@@ -9,8 +9,7 @@
             <div class='card-header'>Редактировать пост</div>
             <div class='card-body'>
                 <form method='post' enctype='multipart/form-data'
-                      action='{% url ' post_edit
-                ' author post.id %}'>
+                      action='{% url ' post_edit' author post.id %}'>
                 {% csrf_token %}
                 {{ form.as_p }}
                 <div class='col-md-6 offset-md-4'>
@@ -24,7 +23,8 @@
                 </div>
                 <div class='card-body'>
                     <form method='post' enctype='multipart/form-data'
-                          action='{% url ' new-post' %}'>
+                          action='{% url ' new-post
+                    ' %}'>
                     {% csrf_token %}
                     {{ form.as_p }}
                     <div class='col-md-6 offset-md-4'>

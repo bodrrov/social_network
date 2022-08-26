@@ -6,12 +6,10 @@
   <div class="carousel-inner">
       {% for slide in slider_list %}
        <div class="carousel-item active">
-      <img src="{{ slide.cms_img.url }}" class="d-block w-100" alt="...">
-    </div>
+       <img src="{{ slide.cms_img.url }}" class="d-block w-100" alt="...">
+       </div>
       {% endfor %}
   </div>
-
-
 
   <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>

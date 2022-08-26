@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 #from .forms import CreationForm
 from .forms import PostForm
 from django.core.paginator import Paginator
+from telebot.sendmessage import sendTelegram
 
 
 def index(request):
@@ -104,7 +105,6 @@ def post_edit(request, username, post_id):
 def thanks(request):
     if request.POST:
         author = request.POST['author']
-        pub_date = request.POST['pub_date']
         group = request.POST['group']
         text = request.POST['text']
         element = Post(author=author,group=group, pub_date=pub_date, text =text)
