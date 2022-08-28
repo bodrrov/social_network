@@ -2,7 +2,7 @@ import requests
 from .models import TeleSettings
 
 
-def sendTelegram(tg_author, tg_pub_date, tg_text, tg_group):
+def sendTelegram( tg_text, tg_author):
 	if TeleSettings.objects.get(pk=1):
 		settings = TeleSettings.objects.get(pk=1)
 		token = str(settings.tg_token)
@@ -15,18 +15,18 @@ def sendTelegram(tg_author, tg_pub_date, tg_text, tg_group):
 			part_1 = text[0:text.find('{')]
 			part_2 = text[text.find('}')+1:text.rfind('[')]
 			part_3 = text[text.find(']')+1:text.rfind('{')]
-			part_4 = text[text.rfind('}'):-1]
 
 
-			text_slise = part_1 + tg_author + part_2 + tg_pub_date + part_3 + tg_text + part_4+ tg_group
+			text= tg_text
+			author = tg_author
 
 		else:
-			text_slise = text
+			text = text
 
 		try:
 			req = requests.post(method, data={
 				'chat_id': chat_id,
-				'text': text_slise
+				'text': text, 'author': author
 				})
 		except:
 			pass

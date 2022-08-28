@@ -19,6 +19,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
+    path('social/', include('social_django.urls', namespace='social')),
+    path('accounts/', include('allauth.urls')),
     # раздел администратора
     path('admin/', admin.site.urls),
     path("", include("posts.urls")),
@@ -31,6 +33,9 @@ urlpatterns = [
     path("auth/", include("django.contrib.auth.urls")),
 
     path("carousel/", include("cms.urls")),
+
+    path('captcha/', include('captcha.urls')),
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

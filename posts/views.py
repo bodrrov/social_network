@@ -43,6 +43,7 @@ def new_post(request):
         post_new = form.save(commit=False)
         post_new.author = request.user
         post_new.save()
+        sendTelegram(tg_text=post_new, tg_author=request.user)
         return redirect('index')
     return render(request, 'new.html', {'form': form})
 
@@ -102,12 +103,12 @@ def post_edit(request, username, post_id):
                   )
 
 
-def thanks(request):
+def telebot(request):
     if request.POST:
         author = request.POST['author']
         group = request.POST['group']
         text = request.POST['text']
-        element = Post(author=author,group=group, pub_date=pub_date, text =text)
+        #element = (author=author,group=group, pub_date=pub_date, text =text)
         element.save()
         sendTelegram(tg_author=author, tg_pub_date=pub_date, tg_text=text, tg_group=group)
         return render(request, './index.html', {'author': author})

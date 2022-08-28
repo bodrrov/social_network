@@ -1,3 +1,4 @@
+{% load socialaccount %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/"><span style="color:blue">Ya</span>gram</a>
 
@@ -7,12 +8,10 @@
         <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
         <a class="p-2 text-dark" href="{% url 'new' %}">Новая запись</a>
         <a class="p-2 text-dark" href="{% url 'carousel' %}">Галлерея</a>
+        <a class="p-2 text-dark" href="{% provider_login_url "vk" method="oauth2" %}">Войти через ВКонтакте</a>
         {% else %}
         <a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
         <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
-
-
-
         {% endif %}
     </nav>
 </nav>

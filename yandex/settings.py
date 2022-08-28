@@ -43,6 +43,8 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 # Application definition
 
 INSTALLED_APPS = [
+    'captcha',
+    'social_django',
     'telebot',
     'cms',
     'users',
@@ -56,6 +58,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.vk',
 
 ]
 
@@ -84,10 +90,16 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'context.year',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+
             ],
         },
     },
 ]
+
+SOCIAL_AUTH_VK_OATH2_KEY = 'XXXXXXX'
+SOCIAL_AUTH_VK_OATH2_SECRET = 'XXXXXXXXX'
 
 WSGI_APPLICATION = 'yandex.wsgi.application'
 
@@ -119,7 +131,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -148,3 +163,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Идентификатор текущего сайта
 SITE_ID = 1
+
+SOCIALACCOUNT_PROVIDERS = {
+    'vk': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '8076200',
+            'secret': 'sHvju1EvlB5sGJm1rlb4',
+            'key': ''
+        }
+    }
+}
