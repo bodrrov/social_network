@@ -2,13 +2,14 @@
 {% block title %}Галлерея{% endblock %}
 {% block header %}Галлерея{% endblock %}
 {% block content %}
+
 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">
-      {% for slide in slider_list %}
+       {% for slide in slider_list %}
        <div class="carousel-item active">
        <img src="{{ slide.cms_img.url }}" class="d-block w-100" alt="...">
        </div>
-      {% endfor %}
+       {% endfor %}
   </div>
 
   <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -19,5 +20,17 @@
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </a>
+</div>
+<div class="slideshow">
+    <div class="slideshow-item">
+        {% for slide in slider_list %}
+        <img src="{{ slide.cms_img.url }}" alt="">
+        {% endfor %}
+        <div class="slideshow-item-text">
+
+        </div>
+    </div>
+
+
 </div>
 {% endblock %}

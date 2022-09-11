@@ -22,6 +22,7 @@ def sendTelegram( tg_text, tg_author):
 
 		else:
 			text = text
+			author = tg_author
 
 		try:
 			req = requests.post(method, data={

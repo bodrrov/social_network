@@ -16,4 +16,10 @@ class CreationForm(UserCreationForm):
         # укажем, какие поля должны быть видны в форме и в каком порядке
         fields = ("first_name", "last_name", "username", "email")
 
+class ContactForm(forms.Form):
+    subject = forms.CharField(max_length=100)
+    message = forms.CharField(widget=forms.Textarea)
+    sender = forms.EmailField()
+    cc_myself = forms.BooleanField(required=False)
+
 

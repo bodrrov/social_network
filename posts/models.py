@@ -17,4 +17,28 @@ class Post(models.Model):
     def __str__(self):
         return self.text[:10]
 
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE,
+                             related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               related_name='comments')
+    created = models.DateTimeField('date published', auto_now_add=True,
+                                   db_index=True)
+    text = models.TextField()
+
+    class Meta:
+        ordering = ('created',)
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="follower")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following")
+    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True,
+                                    db_index=True)
+
+    class Meta:
+        ordering = ["-pub_date"]
+        unique_together = ["user", "author"]
+
+
 
