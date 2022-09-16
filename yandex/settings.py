@@ -26,8 +26,12 @@ SECRET_KEY = 'django-insecure-!x820!^4^tl9nyvhbgcuepqapizwe-29w0kgw*s21k)zinf7ik
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "[::1]",
+    "testserver",
+]
 
 # Login
 
@@ -50,6 +54,7 @@ INSTALLED_APPS = [
     'users',
     'group',
     'posts',
+    'debug_toolbar',
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.admin',
@@ -62,6 +67,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
+    'sorl.thumbnail',
 
 ]
 
@@ -73,8 +79,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 ROOT_URLCONF = 'yandex.urls'
 
 TEMPLATES = [
@@ -151,13 +161,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "/static/"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# Login
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATICFILES_FINDERS = [
+ "django.contrib.staticfiles.finders.FileSystemFinder",
+ "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+   ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -174,5 +186,10 @@ SOCIALACCOUNT_PROVIDERS = {
             'secret': 'sHvju1EvlB5sGJm1rlb4',
             'key': ''
         }
+    }
+}
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }

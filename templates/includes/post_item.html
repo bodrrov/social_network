@@ -1,4 +1,8 @@
 <div class="card mb-3 mt-1 shadow-sm">
+    {% load thumbnail %}
+    {% thumbnail post.image "1000x700" upscale=True as im %}
+        <img class="card-img" src="{{ im.url }}">
+    {% endthumbnail %}
     <div class="card-body">
         <p class="card-text">
             <a name="post_{{ post.id }}"
@@ -31,6 +35,11 @@
                        href="{% url 'post_edit' post.author.username post.id %}"
                        role="button">
                         Редактировать
+                    </a>
+                     <a class="btn btn-sm text-muted"
+                      
+                       role="button">
+                        Удалить
                     </a>
                 {% endif %}
             </div>

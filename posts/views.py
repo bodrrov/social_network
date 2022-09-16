@@ -10,7 +10,6 @@ from telebot.sendmessage import sendTelegram
 def index(request):
     post_list = Post.objects.order_by('-pub_date').all()
     paginator = Paginator(post_list, 10)  # показывать по 10 записей на странице.
-
     page_number = request.GET.get('page')  # переменная в URL с номером запрошенной страницы
     page = paginator.get_page(page_number)  # получить записи с нужным смещением
     return render(
@@ -18,23 +17,31 @@ def index(request):
         'index.html',
         {'page': page, 'paginator': paginator}
     )
-def group_posts(request, slug=None):
-    group = get_object_or_404(Group, slug = slug)
-    posts = Post.objects.filter(group = group).order_by("-pub_date")[:12]
-    paginator = Paginator(posts, 10)  # показывать по 10 записей на странице.
 
-    page_number = request.GET.get('page')  # переменная в URL с номером запрошенной страницы
-    page = paginator.get_page(page_number)  # получить записи с нужным смещением
-    context = {"group": group, "posts": posts}
+def group_posts(request, slug):
+    group = get_object_or_404(Group, slug=slug)
+    posts = group.posts.all()[:12]
+    post_list = group.posts.all()
+    paginator = Paginator(post_list, 10)
 
-    return render(request, "group.html",context, {'page': page, 'paginator': paginator})
-
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(
+        request,
+        "group.html",
+        {
+            "group": group,
+            "posts": posts,
+            'paginator': paginator,
+            'page': page
+        }
+    )
 
 @login_required()
 def new_post(request):
-    form = PostForm(request.POST or None, files=request.FILES or None)
-    if request.method == 'POST' and form.is_valid():
-        post_new = form.save(commit=False)
+    form = PostForm(request.POST or None, files=request.FILES or None)  #инициализация формы
+    if request.method == 'POST' and form.is_valid():  #проверка на валидацию и проверка на запрос от пользователя
+        post_new = form.save(commit=False)  #commit= False вернет объект,не сохраненный в базу данных
         post_new.author = request.user
         post_new.save()
         sendTelegram(tg_text=post_new, tg_author=request.user)
@@ -50,14 +57,17 @@ def profile(request, username):
     post_count = paginator.count
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'profile.html', {
+    return render(
+        request,
+        'profile.html',
+        {
             'profile': user,
             'post_list': post_list,
             'my_posts': post_count,
             'paginator': paginator,
             'page': page
-        })
-
+        }
+    )
 
 def post_view(request, username, post_id):
     post = get_object_or_404(Post.objects.select_related('author'),
@@ -76,25 +86,28 @@ def post_edit(request, username, post_id):
     post = get_object_or_404(Post,
                              id=post_id,
                              author__username=username)
-
     if request.user != post.author:
         return redirect('post',
                         username=username,
                         post_id=post_id)
-
     form = PostForm(request.POST or None, instance=post)
     if form.is_valid():
         form.save()
         return redirect('post',
                         username=username,
                         post_id=post_id)
-
     return render(request,
                   'new_post.html',
                   {'form': form,
-                   'post': post
+                   'post': post,
+                   'edit':True
                    }
                   )
+@login_required
+def delete_post(request,post_id=None):
+    post_to_delete=Post.objects.get(id=post_id)
+    post_to_delete.delete()
+    return HttpResponseRedirect(request, '/index.html')
 
 
 def telebot(request):
@@ -156,7 +169,6 @@ def follow_index(request):
 
                   })
 
-
 @login_required
 def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
@@ -172,3 +184,4 @@ def profile_unfollow(request, username):
     if following.exists():
         following.delete()
     return redirect('follow_index')
+

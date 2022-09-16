@@ -6,7 +6,7 @@ from captcha.fields import CaptchaField
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ['text', 'group']
+        fields = ['text', 'group', 'image']
         captcha = CaptchaField()
 
 class CommentForm(forms.ModelForm):
