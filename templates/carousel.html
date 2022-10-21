@@ -11,6 +11,14 @@
    {% endfor %}
 </div>
 
+ <div class="content">
+    <div class="container">
+      <h2 class="my-5 text-center">Carousel #7</h2>
+      <div class="owl-carousel owl-1">
+          {% for slide in slider_list %}
+        <div><img src="{{ slide.cms_img.url }}" alt="Image" class="img-fluid"></div>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
 
-
-{% endblock %}

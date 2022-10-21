@@ -1,0 +1,8 @@
+img{max-width:100%;height:auto}
+.multi-carousel{overflow:hidden}
+.multi-carousel .carousel-control-prev,.multi-carousel .carousel-control-next{background:rgba(255,255,255,0.5);width:5%}
+.multi-carousel .carousel-inner{width:310%;left:-80%}
+.carousel-inner .carousel-item-right.active,.carousel-inner .carousel-item-next{transform:translateX(75%)}
+.carousel-inner .carousel-item-left.active,.carousel-inner .carousel-item-prev{transform:translateX(-75%)}
+.carousel-inner .carousel-item-right,.carousel-inner .carousel-item-left{transform:translateX(0)}
+.item-third{float:left;width:25%;background-size:cover;height:auto}

@@ -86,23 +86,26 @@ def post_edit(request, username, post_id):
     post = get_object_or_404(Post,
                              id=post_id,
                              author__username=username)
+
     if request.user != post.author:
         return redirect('post',
                         username=username,
                         post_id=post_id)
+
     form = PostForm(request.POST or None, instance=post)
     if form.is_valid():
         form.save()
         return redirect('post',
                         username=username,
                         post_id=post_id)
+
     return render(request,
                   'new_post.html',
                   {'form': form,
-                   'post': post,
-                   'edit':True
+                   'post': post
                    }
                   )
+
 @login_required
 def delete_post(request,post_id=None):
     post_to_delete=Post.objects.get(id=post_id)
