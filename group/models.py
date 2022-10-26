@@ -8,5 +8,5 @@ class Group(models.Model):
     slug = models.SlugField(unique= True)
     description = models.TextField()
 
-    def __str__(self):
+    def __str__(self): #метод при печати на экран выводится titile
         return self.title

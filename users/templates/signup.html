@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Зарегистрироваться{% endblock %}
 {% block content %}
-
+{# загружаем фильтр #}
+{% load user_filters %}
     <div class="row justify-content-center">
         <div class="col-md-8 p-5">
             <div class="card">
@@ -25,7 +26,8 @@
                                 {{ field.label }}{% if field.required %}<span class="required">*</span>{% endif %}
                             </label>
                             <div class="col-md-6">
-                                {{ field }}
+                                {# подключаем фильтр и указываем класс #}
+                                    {{ field|addclass:"form-control" }}
                                 {% if field.help_text %}
                                     <small id="{{ field.id_for_label }}-help"
                                            class="form-text text-muted">{{ field.help_text|safe }}</small>

@@ -8,18 +8,19 @@ from telebot.sendmessage import sendTelegram
 
 
 def index(request):
-    post_list = Post.objects.order_by('-pub_date').all()
+    post_list = Post.objects.order_by('-pub_date').all() #сортировка записей
     paginator = Paginator(post_list, 10)  # показывать по 10 записей на странице.
     page_number = request.GET.get('page')  # переменная в URL с номером запрошенной страницы
     page = paginator.get_page(page_number)  # получить записи с нужным смещением
     return render(
         request,
         'index.html',
-        {'page': page, 'paginator': paginator}
+        {'page': page,
+         'paginator': paginator}
     )
 
 def group_posts(request, slug):
-    group = get_object_or_404(Group, slug=slug)
+    group = get_object_or_404(Group, slug=slug) #функция ищет объект модели,а если не находит error 404
     posts = group.posts.all()[:12]
     post_list = group.posts.all()
     paginator = Paginator(post_list, 10)
@@ -68,6 +69,20 @@ def profile(request, username):
             'page': page
         }
     )
+@login_required
+def profile_follow(request, username):
+    author = get_object_or_404(User, username=username)
+    if request.user != author:
+        Follow.objects.get_or_create(user=request.user, author=author)
+    return redirect('profile', username=username)
+
+@login_required
+def profile_unfollow(request, username):
+    user =  Follow.objects.filter(user.posts.get(username=request.user))
+    author = Follow.objects.filter(user.objects.get(username=username))
+    user.delete()
+    author.delete()
+    return redirect('profile', username=username)
 
 def post_view(request, username, post_id):
     post = get_object_or_404(Post.objects.select_related('author'),
@@ -80,6 +95,8 @@ def post_view(request, username, post_id):
         'post.html',
         {'post': post, 'author': author, 'comments': comments, 'form': form}
     )
+
+
 
 @login_required
 def post_edit(request, username, post_id):
@@ -172,19 +189,7 @@ def follow_index(request):
 
                   })
 
-@login_required
-def profile_follow(request, username):
-    author = get_object_or_404(User, username=username)
-    if request.user != author:
-        Follow.objects.get_or_create(user=request.user, author=author)
-    return redirect('profile', username=username)
 
 
-@login_required
-def profile_unfollow(request, username):
-    author = get_object_or_404(User, username=username)
-    following = Follow.objects.filter(user=request.user, author=author)
-    if following.exists():
-        following.delete()
-    return redirect('follow_index')
+
 
