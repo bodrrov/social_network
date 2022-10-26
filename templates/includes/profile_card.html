@@ -22,7 +22,7 @@
                         <div class="h6 text-muted">
                             Записей: {{ profile.posts.count }}
                    <li class="list-group-item">
-                         {% if follower %}
+                         {% if following%}
                          <a class="btn btn-lg btn-light"
                                   href="{% url 'profile_unfollow' profile.username %}" role="button">
                                   Отписаться
