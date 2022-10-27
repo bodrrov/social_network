@@ -5,12 +5,11 @@
 <div class='row justify-content-center'>
     <div class='col-md-8 p-5'>
         <div class='card'>
-             {% if edit %}
+            {% if post %}
             <div class='card-header'>Редактировать пост</div>
             <div class='card-body'>
                 <form method='post' enctype='multipart/form-data'
-                      action='{% url ' post_edit
-                ' author post.id %}'>
+                      action='{% url ' post_edit' author post.id %}'>
                 {% csrf_token %}
                 {{ form.as_p }}
                 <div class='col-md-6 offset-md-4'>

@@ -1,5 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.views.generic import CreateView
+from social_core.backends import username
+
 from .models import Post,Group,User, Follow
 from django.contrib.auth.decorators import login_required
 from .forms import PostForm, CommentForm
@@ -58,6 +60,9 @@ def profile(request, username):
     post_count = paginator.count
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
+    following = False
+    if request.user.is_authenticated:
+        following = user.following.filter(user=request.user).exists()
     return render(
         request,
         'profile.html',
@@ -66,23 +71,11 @@ def profile(request, username):
             'post_list': post_list,
             'my_posts': post_count,
             'paginator': paginator,
-            'page': page
+            'page': page,
+            'following': following,
+            'user': user,
         }
     )
-@login_required
-def profile_follow(request, username):
-    author = get_object_or_404(User, username=username)
-    if request.user != author:
-        Follow.objects.get_or_create(user=request.user, author=author)
-    return redirect('profile', username=username)
-
-@login_required
-def profile_unfollow(request, username):
-    user =  Follow.objects.filter(user.posts.get(username=request.user))
-    author = Follow.objects.filter(user.objects.get(username=username))
-    user.delete()
-    author.delete()
-    return redirect('profile', username=username)
 
 def post_view(request, username, post_id):
     post = get_object_or_404(Post.objects.select_related('author'),
@@ -117,17 +110,19 @@ def post_edit(request, username, post_id):
                         post_id=post_id)
 
     return render(request,
+
                   'new_post.html',
                   {'form': form,
                    'post': post
                    }
                   )
 
-@login_required
-def delete_post(request,post_id=None):
-    post_to_delete=Post.objects.get(id=post_id)
-    post_to_delete.delete()
-    return HttpResponseRedirect(request, '/index.html')
+
+#@login_required
+#def delete_post(request,post_id):
+     #post = get_object_or_404(Post,id=post_id,author__username=username)
+     #if request.user != post.author:
+
 
 
 def telebot(request):
@@ -168,16 +163,11 @@ def add_comment(request, post_id, username):
         return redirect('post', username, post_id)
     return redirect('post', username, post_id)
 
-
 @login_required
 def follow_index(request):
     author = get_object_or_404(User, username=request.user.username)
-    post_list = (
-        Post.objects.select_related('author').filter(
-            author__following__user=request.user)
-    )
+    post_list = ( Post.objects.select_related('author').filter(author__following__user=request.user))
     paginator = Paginator(post_list, 10)
-
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request,
@@ -186,10 +176,21 @@ def follow_index(request):
                       "paginator": paginator,
                       "page": page,
                       "author": author
-
                   })
 
 
+@login_required
+def profile_follow(request, username):
+    """ Обрабатывает POST-запрос кнопки "Подписаться", добавляет автора в подписку """
+    if request.user.username != username:
+        author = get_object_or_404(User, username=username)
+        Follow.objects.get_or_create(user=request.user, author=author)
+    return redirect('profile', username=username)
 
-
+@login_required
+def profile_unfollow(request, username):
+    """ Обрабатывает POST-запрос кнопки "Отписаться", удаляет автора из подписки """
+    author = get_object_or_404(User, username=username)
+    author.following.filter(user=request.user).delete()
+    return redirect('profile', username=username)
 
