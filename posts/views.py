@@ -102,16 +102,14 @@ def post_edit(request, username, post_id):
         if form.is_valid():
             form.save()
             return redirect(f'/{username}/{post_id}/')
-    return render(request, 'new_post.html', {'form': form, 'post': post, 'user_profile': user_profile})
+    return render(request, 'new_post.html', {'form': form, 'post': post})
 
 @login_required
 def delete_post(request,username, post_id):
     user_profile = get_object_or_404(User, username=username)
     post = get_object_or_404(Post, id=post_id, author=user_profile)
-    if request.user != post.author:
-        return redirect(f'/{username}/{post_id}/')
     post.delete()
-    return render(request, 'new_post.html', {'post': post, 'author': user_profile})
+    return render(request, 'post.html', {'post': post, 'username': username})
 
 def page_not_found(request, exception):
     return render(

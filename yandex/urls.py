@@ -1,17 +1,17 @@
 from django.contrib import admin
-from django.urls import include,path
+from django.urls import include,path,re_path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.conf.urls import handler404, handler500
 import debug_toolbar
 from django.contrib.flatpages import views
-
 urlpatterns = [
     path('social/', include('social_django.urls', namespace='social')),
     path('accounts/', include('allauth.urls')),
     # раздел администратора
     path('admin/', admin.site.urls),
     path("", include("posts.urls")),
+    path("", include("likes.urls")),
     # flatpages
     path('about/', include('django.contrib.flatpages.urls')),
     path('about-us/', views.flatpage, {'url': '/about-us/'}, name='about'),
@@ -38,5 +38,4 @@ if settings.DEBUG:
 
 handler404 = "posts.views.page_not_found" # noqa
 handler500 = "posts.views.server_error" # noqa
-
 

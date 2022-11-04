@@ -47,6 +47,9 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'likes',
+    'tweet',
     'captcha',
     'social_django',
     'telebot',
