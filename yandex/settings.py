@@ -47,6 +47,7 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework.authtoken',
     'rest_framework',
     'likes',
     'tweet',
@@ -149,6 +150,15 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 

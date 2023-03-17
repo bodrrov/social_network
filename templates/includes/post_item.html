@@ -18,37 +18,53 @@
                 <strong class="d-block text-gray-dark">#{{ post.group.title }}</strong>
             </a>
         {% endif %}
-
+        <div class="row">
+                <div class="col gap-2 d-md-flex">
+                  <a name="like"></a>
+                  <a
+                    {% if post.author == request.user %} class="btn btn-primary btn-sm disabled"
+                    {% else %} class="btn btn-primary btn-sm"
+                    {% endif %}
+                    {% if not liked %} href="{% url 'post_like' post.id %}"
+                    {% else %} href="{% url 'post_unlike' post.id %}"
+                    {% endif %}
+                    title="Нравится"
+                  >
+                    <svg class="i-heart" viewBox="0 0 32 32" width="24" height="24"
+                      {% if not liked %} fill="none"
+                      {% else %} fill="red"
+                      {% endif %}
+                      stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    >
+                      <path d="M4 16 C1 12 2 6 7 4 12 2 15 6 16 8 17 6 21 2 26 4 31 6 31 12 28 16 25 20 16 28 16 28 16 28 7 20 4 16 Z" />
+                    </svg> {{ post.liked.count }}
+                  </a>
         <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group ">
-                <a class="btn btn-sm text-muted"
-                   href="{% url 'post' post.author.username post.id %}"
-                   role="button">
-                    {% if post.comments.exists %}
-                        {{ post.comments.count }} комментариев
-                    {% else %}
-                        Добавить комментарий
-                    {% endif %}
-                </a>
-                {% if user == post.author %}
-                    <a class="btn btn-sm text-muted"
-                       href="{% url 'post_edit' post.author.username post.id %}"
-                       role="button">
-                        Редактировать
+
+               {% if post.author == request.user %}
+                    <a class="btn btn-primary btn-sm" href="{% url 'post_edit' post.id %}" title="Изменить запись">
+                      <svg class="i-edit" viewBox="0 0 32 32" width="24" height="24" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z" />
+                      </svg> Редактировать
                     </a>
-                     <a class="btn btn-sm text-muted"
-                        href="{% url 'delete_post' post.author.username post.id %}"
-                       role="button">
-                        Удалить
+                     <a class="btn btn-primary btn-sm" href="{% url 'post' post.author.username post.id %}" title="Добавить комментарий">
+                    <svg class="i-msg" viewBox="0 0 32 32" width="24" height="24" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                      <path d="M2 4 L30 4 30 22 16 22 8 29 8 22 2 22 Z" />
+                    </svg> {{ post.comments.count }}
+                  </a>
+
+                    <a class="btn btn-primary btn-sm" href="{% url 'post_delete' post.id %}" title="Удалить запись">
+                      <svg class="i-trash" viewBox="0 0 32 32" width="24" height="24" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path d="M28 6 L6 6 8 30 24 30 26 6 4 6 M16 12 L16 24 M21 12 L20 24 M11 12 L12 24 M12 6 L13 2 19 2 20 6" />
+                      </svg> Удалить
                     </a>
-                {% endif %}
-                 <a class="btn btn-sm text-muted"
-                       href="{% url 'add_like' post.author.username post.id %}"
-                       role="button">
-                        Лайкнуть
-                    </a>
+                  {% endif %}
+
+
             </div>
             <small class="text-muted">{{ post.pub_date }}</small>
+
         </div>
     </div>
 </div>

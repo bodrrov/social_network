@@ -6,7 +6,6 @@
 
 {% include "includes/menu.html" with index=True %}
 
-    <div class="row">
 
         <h1>Актуальная лента новостей</h1>
         {% cache 20 index_page page.number%}<!-- Вывод ленты записей -->
